@@ -56,6 +56,9 @@ This project demonstrates:
 ├── pyproject.toml            # Python dependencies and project config
 ├── requirements.txt          # pip dependencies
 ├── setup.sh                  # Helper script
+├── cloud_deployment/         # AWS Lambda configuration
+│   ├── Dockerfile            # Lambda container definition
+│   └── lambda_function.py    # Lambda handler
 ├── data/
 │   └── mushroom.csv          # Dataset (semicolon-separated)
 └── models/
@@ -162,11 +165,38 @@ docker build -t mushroom-classifier:latest .
 docker run -p 8000:8000 mushroom-classifier:latest
 ```
 
-### Cloud Deployment
-Detailed guides are in `lab_notes/DEPLOYMENT.md`:
-- AWS Elastic Beanstalk
-- AWS Lambda (serverless)
-- ECR + Fargate
+### ☁️ Cloud Deployment (Live Demo)
+The project is currently deployed on **AWS Lambda** using a Docker Container image. This allows for a serverless, scalable, and cost-effective inference endpoint.
+
+**Live Endpoint**:  
+`https://iqsld27wandaljylgyadxzph6e0aayso.lambda-url.us-east-1.on.aws/`
+
+#### Try it out (Copy & Paste):
+```bash
+curl -X POST "https://iqsld27wandaljylgyadxzph6e0aayso.lambda-url.us-east-1.on.aws/" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cap-diameter": 8.5,
+    "stem-height": 7.2,
+    "stem-width": 6.5,
+    "cap-shape": "x",
+    "cap-surface": "s",
+    "cap-color": "n",
+    "does-bruise-or-bleed": "f",
+    "gill-attachment": "f",
+    "gill-spacing": "c",
+    "gill-color": "k",
+    "stem-surface": "s",
+    "stem-color": "w",
+    "has-ring": "t",
+    "ring-type": "p",
+    "habitat": "d",
+    "season": "s"
+  }'
+```
+*Expected Response:* `{"prediction": "edible", "probability": 0.8989, ...}`
+
+Detailed deployment guides for other methods (Elastic Beanstalk, Fargate) are available in `lab_notes/DEPLOYMENT.md`.
 
 ---
 
@@ -260,4 +290,4 @@ This project is part of ML Zoomcamp 2025 Capstone Project.
 
 ---
 
-**Last Updated**: November 2025
+**Last Updated**: January 2026
